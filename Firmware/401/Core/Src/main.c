@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "usbd_customhid.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,7 +56,8 @@ const osThreadAttr_t LED1_attributes = {
   .priority = (osPriority_t) osPriorityLow,
 };
 /* USER CODE BEGIN PV */
-
+extern USBD_HandleTypeDef  hUsbDeviceFS;
+uint8_t dataToSend[8]; 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -142,7 +143,6 @@ int main(void)
 
   /* Start scheduler */
   osKernelStart();
-
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -212,6 +212,8 @@ void SystemClock_Config(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
+/* USER CODE BEGIN MX_GPIO_Init_1 */
+/* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
@@ -234,6 +236,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+/* USER CODE BEGIN MX_GPIO_Init_2 */
+/* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
@@ -256,8 +260,7 @@ void StartDefaultTask(void *argument)
 	while(1)
 	{
 		HAL_GPIO_TogglePin(LED1_GPIO_Port,LED1_Pin);
-		osDelay(500);
-		
+		vTaskDelay(1000);
 	}
   /* USER CODE END 5 */
 }
@@ -279,13 +282,17 @@ void LED1_task(void *argument)
 		{
 			HAL_GPIO_WritePin(LED0_GPIO_Port,LED0_Pin,GPIO_PIN_RESET);
 			vTaskSuspend(LED0Handle);
+			dataToSend[0]=1;
 		}
 		else
 		{
 			HAL_GPIO_WritePin(LED0_GPIO_Port,LED0_Pin,GPIO_PIN_SET);
 			vTaskResume(LED0Handle);
+			dataToSend[0]=0;
 		}
-		osDelay(50);
+		USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 8);
+		vTaskDelay(100);
+		//osDelay(50);
 		
 	}
   /* USER CODE END LED1_task */

@@ -1,4 +1,4 @@
---cpu=Cortex-M4.fp
+--cpu=Cortex-M4.fp.sp
 "401\startup_stm32f401xc.o"
 "401\main.o"
 "401\freertos.o"

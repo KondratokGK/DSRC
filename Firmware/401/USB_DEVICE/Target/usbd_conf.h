@@ -73,11 +73,11 @@
 /*---------- -----------*/
 #define USBD_LPM_ENABLED     0U
 /*---------- -----------*/
-#define USBD_SELF_POWERED     1U
+#define USBD_SELF_POWERED     0U
 /*---------- -----------*/
-#define USBD_CUSTOMHID_OUTREPORT_BUF_SIZE     2U
+#define USBD_CUSTOMHID_OUTREPORT_BUF_SIZE     10U
 /*---------- -----------*/
-#define USBD_CUSTOM_HID_REPORT_DESC_SIZE     2U
+#define USBD_CUSTOM_HID_REPORT_DESC_SIZE     23U
 /*---------- -----------*/
 #define CUSTOM_HID_FS_BINTERVAL     0x5U
 
@@ -122,7 +122,7 @@
 
 #if (USBD_DEBUG_LEVEL > 1)
 
-#define USBD_ErrLog(...)    printf("ERROR: ") ;\
+#define USBD_ErrLog(...)    printf("ERROR: ");\
                             printf(__VA_ARGS__);\
                             printf("\n");
 #else
@@ -130,7 +130,7 @@
 #endif /* (USBD_DEBUG_LEVEL > 1U) */
 
 #if (USBD_DEBUG_LEVEL > 2)
-#define USBD_DbgLog(...)    printf("DEBUG : ") ;\
+#define USBD_DbgLog(...)    printf("DEBUG : ");\
                             printf(__VA_ARGS__);\
                             printf("\n");
 #else
